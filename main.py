@@ -5,6 +5,7 @@ import serial
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
 # git push
+# git pull << 받아오기
 
 arduino = serial.Serial('COM3', 9600)
 
