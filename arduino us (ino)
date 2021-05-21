@@ -1,25 +1,27 @@
-#define buttonA 4
+#define buttonA 3
+#define buttonB 4
 #define buttonMod 5
+
 #define trigx 6
 #define echox 7
 #define trigy 8
 #define echoy 9
 #define trigz 10
 #define echoz 11
-
-#define error 100
+#define error 300
 
 int mod = 0;
 String modstr = "A";
 int buttonState = 0;
 int lastButtonState = 0;
 int AState = 0;
+int BState = 0;
 float lx = 0; float ly = 0; float lz = 0;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  pinMode(buttonA,INPUT);  pinMode(buttonMod,INPUT);
+  pinMode(buttonA,INPUT);  pinMode(buttonB,INPUT);  pinMode(buttonMod,INPUT);
   pinMode(trigx,OUTPUT);  pinMode(trigy,OUTPUT);  pinMode(trigz,OUTPUT);
   pinMode(echox,INPUT);  pinMode(echoy,INPUT);  pinMode(echoz,INPUT);
 }
@@ -29,14 +31,14 @@ void loop() {
 
   buttonState = digitalRead(buttonMod);  
   AState = digitalRead(buttonA);
-  //button B 정도는 추가 가능?
-  
+  BState = digitalRead(buttonB);
+
+    
   if (buttonState != lastButtonState) {
     if (buttonState == HIGH) {
       mod++;
-      if(mod==4) mod=0;
+      if (mod==4) mod=0;
     }
-    delay(50); //나중에 봐서 제거?
   }
   lastButtonState = buttonState;
 
@@ -51,32 +53,46 @@ void loop() {
         modstr = "D";  break;
     default :  break;
   }
-  // modstr에 각 모드별 문자 입력
 
   if (mod == 0) {
     if(AState == 1) {
       modstr = "a";
     }    
-  } // mod 0 드로잉 모드라면 Astate가 1 이면 a , Astate가 0이면 A
-  
+  }
+  if (mod == 1) {
+    if(AState == 1) {
+      modstr = "b";
+    }    
+  }
+  if (mod == 2) {
+    if(AState == 1) {
+      modstr = "c";
+    }    
+  }
+  if (mod == 3) {
+    if(AState == 1) {
+      modstr = "d";
+    }    
+  }
+
   digitalWrite(trigx,HIGH); delayMicroseconds(10); digitalWrite(trigx,LOW);
   float tx = pulseIn(echox,HIGH,30000); float dx = tx * 0.17; 
   digitalWrite(trigy,HIGH); delayMicroseconds(10); digitalWrite(trigy,LOW);
   float ty = pulseIn(echoy,HIGH,30000); float dy = ty * 0.17;
   digitalWrite(trigz,HIGH); delayMicroseconds(10); digitalWrite(trigz,LOW);
   float tz = pulseIn(echoz,HIGH,30000); float dz = tz * 0.17;
-  if (abs(dx-lx) > error) {
-    modstr = "X";
-  } else if (abs(dy-ly) > error) {
-    modstr = "X";
-  } else if (abs(dz-lz) > error){
-    modstr = "X";
-  }
+//  if (abs(dx-lx) > error) {
+//    modstr = "X";
+//  } else if (abs(dy-ly) > error) {
+//    modstr = "X";
+//  } else if (abs(dz-lz) > error){
+//    modstr = "X";
+// }
   //이상한 값이 나오면 X 출력
   lx = dx;  ly = dy; lz = dz;
 
-  //Serial.println(modstr+String(dx)+","+String(dy)+","+String(dz));
-  Serial.println(String(dx)+","+String(dy)+","+String(dz));
-  //Serial.println(modstr+String(dx));
-  delay(300);
+  Serial.println(modstr+","+String(dx)+","+String(dy)+","+String(dz));
+  //Serial.println(String(dx)+","+String(dy)+","+String(dz));
+  
+  delay(100);
 }
