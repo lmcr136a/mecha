@@ -12,7 +12,6 @@ def showfig(x,y,z):
 
 def update_fig(hl, new_data):
     xdata, ydata, zdata = hl._verts3d
-    print(xdata, ydata, zdata)
     hl.set_xdata(np.array(np.append(xdata, new_data[0])))
     hl.set_ydata(np.array(np.append(ydata, new_data[1])))
     hl.set_3d_properties(np.array(np.append(zdata, new_data[2])))
