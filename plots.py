@@ -20,7 +20,7 @@ def update_fig(hl, new_data):
     return hl
 
 
-def get_3dfig_seed(start_point=[0,0,0]):
+def get_3dfig_seed(map_ax, start_point=[0,0,0]):
     x = start_point[0]
     y = start_point[1]
     z = start_point[2]

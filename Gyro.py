@@ -11,6 +11,17 @@ from plots import get_3dfig_seed, update_fig
 PORT = "COM3"
 
 
+def get_coordinate(acc, coor, past_time=time.time()):
+    # acc = [ax, ay, az]
+    # coor = [x, y, z]
+    time_unit = round(time.time() - past_time,6)
+    time_unit = float(str(time_unit)[-7:])
+    print(time_unit)
+    d_coor = [0.5*(time_unit**2)*a for a in acc ]
+    new_coor = [sum(x) for x in zip(d_coor, coor)]
+    return new_coor
+
+
 if __name__ == "__main__":
     arduino = serial.Serial(PORT, 9600)
     map = plt.figure()
@@ -19,35 +30,27 @@ if __name__ == "__main__":
     map_ax.set_xlim3d([-1000, 1000])
     map_ax.set_ylim3d([-1000, 1000])
     map_ax.set_zlim3d([-1000, 1000])
-
-
-    plt.show(block=False)
-
+    coor=[0,0,0]
 
     for i in range(100000000):
-        print(i)
         ardu_line = arduino.readline()
         ardu_line = ardu_line.decode()[:-2]
         try:
-            cx,cy,cz=asdf.split(",")
+            ax, ay, az=ardu_line.split(",")
         except:
-            print("asdf: ", asdf)
+            print("ardu_line: ", ardu_line)
             continue
-        cx1 = float(cx)
-        cy1 = float(cy)
-        cz1 = float(cz)
+        acc = [float(ax), float(ay), float(az)]
 
-        matrix = [cx1,cy1,cz1]
-        result = magnet(matrix)
-
-        newdata = (result[0][0]*100, result[1][0]*100, result[2][0]*100)
         if i == 0:
-            hl = get_3dfig_seed(newdata)
+            hl = get_3dfig_seed(map_ax)
 
-        
-        print("newdata: ", newdata)
-        update_fig(hl, newdata)
+        coor = get_coordinate(acc, coor)
+        print("acc: ", acc)
+        update_fig(hl, coor)
         plt.pause(1)
+        
+        plt.show(block=False)
 
         time.sleep(1.0e-1)
     
