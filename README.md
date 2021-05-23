@@ -8,6 +8,10 @@ git pull
 
 # 내 코드 푸시하기(commit 내용에 간단한 설명 부탁)
 git add (푸시하고싶은 파일) 또는 git add . (전체파일)
+
 git commit -m "하고싶은 말"
+
 git push
+
+
 git pull << 받아오기
