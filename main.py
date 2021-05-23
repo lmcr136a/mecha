@@ -39,6 +39,16 @@ def get_axis(map):
     return map_ax
 
 
+def bin_to_bool(bin):
+    if bin == 1:
+        return True
+    elif bin == 0:
+        return False
+    else:
+        print("Error in bin to bool")
+        return False
+
+
 def whether_clicked(left_pressed, past_left_pressed):
     if left_pressed and past_left_pressed: # 계속 눌린 상태
         return "not changed"
@@ -80,7 +90,8 @@ if __name__ == "__main__":
         except:
             print("ardu: ", ardu)
             continue
-
+        left_pressed = bin_to_bool(left_pressed)
+        right_pressed = bin_to_bool(right_pressed)
         newdata = (float(cx), float(cy), float(cz))
 
         if i == 0:
