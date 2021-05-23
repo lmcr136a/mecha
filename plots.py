@@ -1,13 +1,7 @@
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
+import serial
+import time
 from matplotlib import pyplot as plt
-
-
-def showfig(x,y,z):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(x,y,z)
-    plt.show()
 
 
 def update_fig(hl, new_data):
@@ -19,9 +13,20 @@ def update_fig(hl, new_data):
     return hl
 
 
-def get_3dfig_seed(map_ax, start_point=[0,0,0]):
+def get_3dfig_seed(map_ax, start_point):
     x = start_point[0]
     y = start_point[1]
     z = start_point[2]
     hl,  = map_ax.plot3D([x], [y], [z])
     return hl
+
+
+def cancel_fig(hl, new_data=0):
+    xdata, ydata, zdata = hl._verts3d
+
+    hl.set_xdata(np.array(xdata[:len(xdata)-20]))
+    hl.set_ydata(np.array(ydata[:len(ydata)-20]))
+    hl.set_3d_properties(np.array(zdata[:len(zdata)-20]))
+    plt.draw()
+
+    return hl 
