@@ -11,7 +11,7 @@ git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 
 git commit -m "하고싶은 말"
 
-git push
+git push origin master
 
 
-git pull << 받아오기
+git pull origin master << 받아오기
