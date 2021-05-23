@@ -8,8 +8,7 @@ from matplotlib import pyplot as plt
 from plots import *
 from colors import *
 from circles import *
-from rects import *
-
+from rects import *s
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
 # git push
