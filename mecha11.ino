@@ -1,86 +1,92 @@
-#define buttonA 3
-#define buttonB 4
-#define buttonMod 5
+#include "BluetoothSerial.h"
 
-#define trigx 6
-#define echox 7
-#define trigy 8
-#define echoy 9
-#define trigz 10
-#define echoz 11
+BluetoothSerial bt;
+
+#define buttonA 15
+#define buttonB 4
+#define cl 22
+#define dt 23
+
+#define trigx 33
+#define echox 32
+#define trigy 27
+#define echoy 14
+#define trigz 26
+#define echoz 25
 #define error 300
 
 int mod = 0;
-String modstr = "A";
-int buttonState = 0;
-int lastButtonState = 0;
+String modstr = "default";
 int AState = 0;
 int BState = 0;
-float lx = 0; float ly = 0; float lz = 0;
+//float lx = 0; float ly = 0; float lz = 0;
+
+int count = 0;
+int newCl, preCl;
+int interval = 5;
+int NumofMod = 7
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
-  pinMode(buttonA,INPUT);  pinMode(buttonB,INPUT);  pinMode(buttonMod,INPUT);
+  Serial.begin(115200);
+  pinMode(buttonA,INPUT);  pinMode(buttonB,INPUT);
+  pinMode(cl, INPUT); pinMode(dt, INPUT);
   pinMode(trigx,OUTPUT);  pinMode(trigy,OUTPUT);  pinMode(trigz,OUTPUT);
   pinMode(echox,INPUT);  pinMode(echoy,INPUT);  pinMode(echoz,INPUT);
+
+  preCl = digitalRead(cl);
+
+  bt.begin("ESP32_SPP");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  buttonState = digitalRead(buttonMod);  
+  newCl = digitalRead(cl);
+  if(newCl != preCl){
+    if(digitalRead(dt)!=newCl){
+      count--;
+    }
+    else{
+      count++;
+    }
+  }
+
+  preCl = newCl;
+
   AState = digitalRead(buttonA);
   BState = digitalRead(buttonB);
 
-    
-  if (buttonState != lastButtonState) {
-    if (buttonState == HIGH) {
-      mod++;
-      if (mod==4) mod=0;
-    }
-  }
-  lastButtonState = buttonState;
+  if(count>(NumofMod*interval) - 1) count = 0;
+  if(count<0) count = (NumofMod*interval) - 1;
 
+  mod = count/interval;
+
+  //Mode: default, rect, colored_rect, circle, colored_circle, cube, color
   switch (mod) {
     case 0 :
-        modstr = "A";  break;
+        modstr = "default";  break;
     case 1 :
-        modstr = "B";  break;
+        modstr = "rect";  break;
     case 2 :
-        modstr = "C";  break;
+        modstr = "colored_rect";  break;
     case 3 :
-        modstr = "D";  break;
+        modstr = "circle";  break;
+    case 4 :
+        modstr = "colored_circle";  break;
+    case 5 :
+        modstr = "cube";  break;
+    case 6 :
+        modstr = "color";  break;
     default :  break;
   }
 
-  if (mod == 0) {
-    if(AState == 1) {
-      modstr = "a";
-    }    
-  }
-  if (mod == 1) {
-    if(AState == 1) {
-      modstr = "b";
-    }    
-  }
-  if (mod == 2) {
-    if(AState == 1) {
-      modstr = "c";
-    }    
-  }
-  if (mod == 3) {
-    if(AState == 1) {
-      modstr = "d";
-    }    
-  }
-
   digitalWrite(trigx,HIGH); delayMicroseconds(10); digitalWrite(trigx,LOW);
-  float tx = pulseIn(echox,HIGH); float dx = tx * 0.17; 
+  float tx = pulseIn(echox,HIGH,30000); float dx = tx * 0.17;
   digitalWrite(trigy,HIGH); delayMicroseconds(10); digitalWrite(trigy,LOW);
-  float ty = pulseIn(echoy,HIGH); float dy = ty * 0.17;
+  float ty = pulseIn(echoy,HIGH,30000); float dy = ty * 0.17;
   digitalWrite(trigz,HIGH); delayMicroseconds(10); digitalWrite(trigz,LOW);
-  float tz = pulseIn(echoz,HIGH); float dz = tz * 0.17;
+  float tz = pulseIn(echoz,HIGH,30000); float dz = tz * 0.17;
 //  if (abs(dx-lx) > error) {
 //    modstr = "X";
 //  } else if (abs(dy-ly) > error) {
@@ -89,10 +95,8 @@ void loop() {
 //    modstr = "X";
 // }
   //이상한 값이 나오면 X 출력
-  lx = dx;  ly = dy; lz = dz;
+//  lx = dx;  ly = dy; lz = dz;
 
-  Serial.println(modstr+","+String(dx)+","+String(dy)+","+String(dz));
-  //Serial.println(String(dx)+","+String(dy)+","+String(dz));
-  
+  bt.println(String(AState)+","+String(BState)+","+modstr+","+String(dx)+","+String(dy)+","+String(dz));
   delay(50);
 }
