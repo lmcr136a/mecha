@@ -8,3 +8,7 @@ import time
 
 def circle(hl, startcoor, endcoor):
     return hl
+
+
+def colored_circle(hl, startcoor, endcoor):
+    return hl
