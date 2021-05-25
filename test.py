@@ -20,9 +20,10 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
+MODE = "default"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
-
+COLORS = ['r', 'b', 'y', 'k', 'g']
 
 def get_ardu_line(arduino):
         ardu = arduino.readline()
@@ -30,7 +31,7 @@ def get_ardu_line(arduino):
 
 
 def get_axis(map):
-    map_ax = Axes3D(map)
+    map_ax = Axes3D(map, facecolor="k")
     map_ax.autoscale(enable=True, axis='both', tight=True)
     map_ax.set_xlim3d([0, XLIM])
     map_ax.set_ylim3d([0, YLIM])
@@ -86,8 +87,12 @@ def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
             dummy.append([mode, True, False, j, j, j])
         if first_pressed < j <= interval1:
             dummy.append([mode, False, False, j, j, j])
-        if interval1 < j <= second_pressed:
+        if interval1 < j < second_pressed:
             dummy.append([mode, True, False, j, j, j])
+
+        if j == second_pressed:
+            dummy.append(["color", True, False, j, j, j])
+
         if second_pressed < j <= interval2:
             dummy.append([mode, False, False, j, j, j])
         if interval2 < j <= third_pressed:
@@ -99,7 +104,7 @@ def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
 
 
 if __name__ == "__main__":
-    dummy = make_dummy_input("cube")
+    dummy = make_dummy_input(MODE)
 
     mapp = plt.figure()
     map_ax = get_axis(mapp)
@@ -107,7 +112,8 @@ if __name__ == "__main__":
     prestate = 0
     start_coor = 0
     end_coor = 0
-
+    color = 'w'
+    color_index = 0
     for dumm in dummy:
         try:
             mode, left_pressed, right_pressed, cx, cy, cz = dumm
@@ -125,25 +131,28 @@ if __name__ == "__main__":
         clicked_or_released = whether_clicked(left_pressed, prestate)
         mode_function = get_mode_function(mode)
 
-        print("dumm: ", dumm, clicked_or_released)
-        if mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
+        print("dumm: ", dumm, clicked_or_released, COLORS[color_index])
+
+        if clicked_or_released == "clicked":
+            hl = get_3dfig_seed(map_ax, newdata, color)
+        elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
             if clicked_or_released == "clicked":
-                hl = get_3dfig_seed(map_ax, newdata)
                 start_coor = newdata
             elif clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor)
         
         elif left_pressed and mode == "color":
-            pass
+            color = COLORS[color_index]
+            color_index += 1
+            if color_index > len(COLORS):
+                color_index = 0
         elif left_pressed and mode == "default":
             mode_function(hl, newdata)
         elif right_pressed:
             cancel_fig(hl)
         else:
-            if clicked_or_released == "clicked":
-                hl = get_3dfig_seed(map_ax, newdata)
-
+            pass
 
         prestate = left_pressed
         plt.pause(PLT_TIME_SLEEP)
