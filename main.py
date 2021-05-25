@@ -118,6 +118,7 @@ if __name__ == "__main__":
         elif right_pressed:
             cancel_fig(hl)
         else:
+            split_fig(hl)
             print("exception")
 
 

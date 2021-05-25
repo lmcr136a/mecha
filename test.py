@@ -92,11 +92,14 @@ def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
             dummy.append([mode, False, False, j, j, j])
         if interval2 < j <= third_pressed:
             dummy.append([mode, True, False, j, j, j])
+    dummy.append([mode, False, False, i, i, i])
+    dummy.append([mode, False, False, i, i, i])
+    dummy.append([mode, False, False, i, i, i])
     return dummy
 
 
 if __name__ == "__main__":
-    dummy = make_dummy_input("default")
+    dummy = make_dummy_input("cube")
 
     mapp = plt.figure()
     map_ax = get_axis(mapp)
@@ -109,7 +112,7 @@ if __name__ == "__main__":
         try:
             mode, left_pressed, right_pressed, cx, cy, cz = dumm
         except:
-            print("dumm: ", dumm)
+            print("!! dumm: ", dumm)
             continue
         left_pressed = bin_to_bool(left_pressed)
         right_pressed = bin_to_bool(right_pressed)
@@ -118,17 +121,15 @@ if __name__ == "__main__":
         if dumm[-3:] == [0,0,0]:
             hl = get_3dfig_seed(map_ax, newdata)
 
-        print("mod: ", mode)
-        print("newdata: ", newdata)
-
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, color
-        clicked_or_released = whether_clicked(mode, prestate)
+        clicked_or_released = whether_clicked(left_pressed, prestate)
         mode_function = get_mode_function(mode)
 
-        
+        print("dumm: ", dumm, clicked_or_released)
         if mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
             if clicked_or_released == "clicked":
-                    start_coor = newdata
+                hl = get_3dfig_seed(map_ax, newdata)
+                start_coor = newdata
             elif clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor)
@@ -140,11 +141,12 @@ if __name__ == "__main__":
         elif right_pressed:
             cancel_fig(hl)
         else:
-            print("exception")
+            if clicked_or_released == "clicked":
+                hl = get_3dfig_seed(map_ax, newdata)
 
 
         prestate = left_pressed
         plt.pause(PLT_TIME_SLEEP)
         time.sleep(TIME_SLEEP)
-
+    time.sleep(2)
 

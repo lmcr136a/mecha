@@ -13,6 +13,14 @@ def update_fig(hl, new_data):
     return hl
 
 
+def split_fig(hl):
+    xdata, ydata, zdata = hl._verts3d
+    hl.set_xdata(np.array([[xdata]]))
+    hl.set_ydata(np.array([[ydata]]))
+    hl.set_3d_properties(np.array([[zdata]]))
+    return hl
+
+
 def get_3dfig_seed(map_ax, start_point):
     x = start_point[0]
     y = start_point[1]
