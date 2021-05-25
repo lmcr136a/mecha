@@ -55,7 +55,7 @@ def whether_clicked(left_pressed, past_left_pressed):
         return "clicked"
     elif past_left_pressed and not left_pressed: # 눌렸었는데 안눌림
         return "released"
-    elif not past_left_pressed and left_pressed: # 떼진상태
+    elif not past_left_pressed and not left_pressed: # 떼진상태
         return "not changed"
     else:
         print("Error in whether_clicked function")
