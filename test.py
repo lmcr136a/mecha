@@ -17,9 +17,9 @@ from rects import *
 ITER = 10000
 PORT = "COM3"
 FREQ = 9600
-XLIM = 3000
-YLIM = 3000
-ZLIM = 1500
+XLIM = 100
+YLIM = 100
+ZLIM = 100
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 
@@ -73,27 +73,49 @@ def get_mode_function(mode_name):
         "color": color,
     }[mode_name]
 
+
+def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
+    first_pressed = round(i * 3/10)
+    interval1 = round(i * 4/10)
+    second_pressed = round(i * 6/10)
+    interval2 = round(i * 7/10)
+    third_pressed = i
+    dummy = []
+    for j in range(int(i)):
+        if j <= first_pressed:
+            dummy.append([mode, True, False, j, j, j])
+        if first_pressed < j <= interval1:
+            dummy.append([mode, False, False, j, j, j])
+        if interval1 < j <= second_pressed:
+            dummy.append([mode, True, False, j, j, j])
+        if second_pressed < j <= interval2:
+            dummy.append([mode, False, False, j, j, j])
+        if interval2 < j <= third_pressed:
+            dummy.append([mode, True, False, j, j, j])
+    return dummy
+
+
 if __name__ == "__main__":
-    arduino = serial.Serial(PORT, FREQ)
-    map = plt.figure()
-    map_ax = get_axis(map)
+    dummy = make_dummy_input("default")
+
+    mapp = plt.figure()
+    map_ax = get_axis(mapp)
     plt.show(block=False)
     prestate = 0
     start_coor = 0
     end_coor = 0
 
-    for i in range(ITER):
-        ardu = get_ardu_line(arduino)
+    for dumm in dummy:
         try:
-            mode, left_pressed, right_pressed, cx, cy, cz = ardu.split(",")
+            mode, left_pressed, right_pressed, cx, cy, cz = dumm
         except:
-            print("ardu: ", ardu)
+            print("dumm: ", dumm)
             continue
         left_pressed = bin_to_bool(left_pressed)
         right_pressed = bin_to_bool(right_pressed)
         newdata = (float(cx), float(cy), float(cz))
 
-        if i == 0:
+        if dumm[-3:] == [0,0,0]:
             hl = get_3dfig_seed(map_ax, newdata)
 
         print("mod: ", mode)
