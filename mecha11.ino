@@ -24,7 +24,7 @@ int BState = 0;
 int count = 0;
 int newCl, preCl;
 int interval = 5;
-int NumofMod = 7
+int NumofMod = 8;
 
 void setup() {
   // put your setup code here, to run once:
@@ -77,6 +77,8 @@ void loop() {
     case 5 :
         modstr = "cube";  break;
     case 6 :
+        modstr = "sphere";  break;
+    case 7 :
         modstr = "color";  break;
     default :  break;
   }
