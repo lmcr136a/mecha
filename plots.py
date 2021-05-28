@@ -49,10 +49,7 @@ def get_3dfig_seed(map_ax, start_point, color="w", show_axis=True):
 
 def cancel_fig(hl, new_data=0):
     xdata, ydata, zdata = hl._verts3d
-
-    hl.set_xdata(np.array(xdata[:len(xdata)-20]))
-    hl.set_ydata(np.array(ydata[:len(ydata)-20]))
-    hl.set_3d_properties(np.array(zdata[:len(zdata)-20]))
-    plt.draw()
-
-    return hl 
+    hl.set_xdata(np.array(0))
+    hl.set_ydata(np.array(0))
+    hl.set_zdata(np.array(0))
+    return hl
