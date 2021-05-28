@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "cube"
+MODE = "default"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -61,6 +61,13 @@ def whether_clicked(left_pressed, past_left_pressed):
     else:
         print("Error in whether_clicked function")
         return "not changed"
+
+
+def clicked(hl, clicked_or_released, map_ax, newdata, color):
+    if clicked_or_released == "clicked":
+        print("get new hl")
+        hl = get_3dfig_seed(map_ax, newdata, color)
+    return hl
         
 
 def get_mode_function(mode_name):
@@ -84,14 +91,17 @@ def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
     third_pressed = i
     dummy = []
     for j in range(int(i)):
-        if j <= first_pressed:      ### 0~30 누르고 있음
+        if j <= first_pressed - 7:      ### 0~30 누르고 있음
             dummy.append([mode, True, False, j, j, j])
+        if j == first_pressed - 6:      ### 값이 튐
+            dummy.append([mode, True, False, 500, j, j])
+        if first_pressed - 6 < j <= first_pressed:      ### 0~30 누르고 있음
+            dummy.append([mode, True, False, j, j, j])
+
         if first_pressed < j <= interval1:   # 10분동안 쉼
             dummy.append([mode, False, False, j, j, j])
-
         if interval1 < j < second_pressed:   ### 40~60 누르고 있음
             dummy.append([mode, True, False, j, j, j])
-
         if second_pressed <= j < second_pressed + 5:   # 40 ~ 45 그냥 있음
             dummy.append([mode, False, False, j, j, j])
 
@@ -152,14 +162,14 @@ if __name__ == "__main__":
 
         elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
             if clicked_or_released == "clicked":
-                print("get new hl")
-                hl = get_3dfig_seed(map_ax, newdata, color)
+                hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
                 start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor)
 
         elif mode in ["sphere"]:
+            hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
             if clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor, map_ax)
@@ -172,9 +182,11 @@ if __name__ == "__main__":
                 color_index = 0
 
         elif left_pressed and mode == "default":
+            hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
             mode_function(hl, newdata)
         else:
             pass
+
         cursor.remove()
         cursor = map_ax.scatter3D(newdata[0], newdata[1], newdata[2], c=newdata[2], cmap='Accent')
 
