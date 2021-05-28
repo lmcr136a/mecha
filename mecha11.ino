@@ -23,7 +23,7 @@ int BState = 0;
 
 int count = 0;
 int newCl, preCl;
-int interval = 5;
+int interval = 3;
 int NumofMod = 8;
 
 void setup() {
