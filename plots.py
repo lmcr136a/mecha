@@ -13,29 +13,6 @@ def update_fig(hl, new_data):
     return hl
 
 
-<<<<<<< Updated upstream
-=======
-# def update_fig(hl, new_data):
-#     xdata, ydata, zdata = hl._verts3d
-#     mean_x = sum(xdata)/len(xdata)
-#     mean_y = sum(ydata)/len(ydata)
-#     mean_z = sum(zdata)/len(zdata)
-#     limit_err = 1.0e4
-#     std_xyz = (mean_x-new_data[0])**2 + (mean_y-new_data[1])**2 + (mean_z-new_data[2])**2
-#     if(std_xyz > limit_err):
-#         return hl
-#     hl.set_xdata(np.array(np.append(xdata, new_data[0])))
-#     hl.set_ydata(np.array(np.append(ydata, new_data[1])))
-#     hl.set_3d_properties(np.array(np.append(zdata, new_data[2])))
-#     map_ax.scatter3D(new_data[0], new_data[1], new_data[2], c=new_data[2], cmap='Greens');
-#     plt.draw()
-#     return hl
-
-
-
-
-
->>>>>>> Stashed changes
 def get_3dfig_seed(map_ax, start_point, color="w", show_axis=True):
     x = start_point[0]
     y = start_point[1]
