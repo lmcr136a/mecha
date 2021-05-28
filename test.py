@@ -121,6 +121,8 @@ if __name__ == "__main__":
     prestate = 0
     start_coor = [0, 0, 0]
     end_coor = [0, 0, 0]
+    cursor = map_ax.scatter3D(0, 0, 0, c = 0, cmap='Accent')
+
     color = 'w'
     color_index = 0
     for dumm in dummy:
