@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "line"
+MODE = "colored_circle"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -164,12 +164,20 @@ if __name__ == "__main__":
             print("removed")
             hl.remove()
 
-        elif mode in ["rect", "line", "colored_rect", "circle", "colored_circle", "cube"]:
+        elif mode in ["rect", "line", "colored_rect", "cube"]:
             if clicked_or_released == "clicked":
                 hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
                 start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
+                mode_function(hl, start_coor, end_coor)
+
+        elif mode in ["circle", "colored_circle"]:
+            if clicked_or_released == "clicked":
+                start_coor = newdata
+            if clicked_or_released == "released":
+                end_coor = newdata
+                hl = get_3dfig_seed(map_ax, newdata, color)
                 mode_function(hl, start_coor, end_coor)
 
         elif mode in ["sphere"]:

@@ -11,18 +11,20 @@ M=400
 # 원, 채워진 원, 구
 
 def circle(hl, startcoor, endcoor):
-    r = math.sqrt(pow(startcoor[0]-endcoor[0], 2) + pow(startcoor[1]-endcoor[1], 2))
-    update_fig(hl, [startcoor[0] + r, startcoor[1], startcoor[2]])
+    r = math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2) + pow(startcoor[2] - endcoor[2], 2))
+    theta = math.atan2(endcoor[2] - startcoor[2], math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2)))
+    psi = math.atan2(endcoor[1] - startcoor[1], endcoor[0] - startcoor[0])
     for i in range(N+1):
-        update_fig(hl, [r * np.cos((i/N) * 2 * np.pi) + startcoor[0], r * np.sin((i/N) * 2 * np.pi) + startcoor[1], startcoor[2]])
+        update_fig(hl, [r * (np.cos((i/N) * 2 * np.pi) * np.cos(theta) * np.cos(psi) - np.sin((i/N) * 2 * np.pi) * np.sin(psi)) + startcoor[0], r * (np.cos((i/N) * 2 * np.pi) * np.cos(theta) * np.sin(psi) + np.sin((i/N) * 2 * np.pi) * np.cos(psi)) + startcoor[1], r * np.cos((i/N) * 2 * np.pi) * np. sin(theta) + startcoor[2]])
     return hl
 
 def colored_circle(hl, startcoor, endcoor):
-    r = math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2))
-    update_fig(hl, [startcoor[0], startcoor[1], startcoor[2]])
+    r = math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2) + pow(startcoor[2] - endcoor[2], 2))
+    theta = math.atan2(endcoor[2] - startcoor[2], math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2)))
+    psi = math.atan2(endcoor[1] - startcoor[1], endcoor[0] - startcoor[0])
     for i in range(M):
-        update_fig(hl, [startcoor[0] + r * np.cos((i / M) * 2 * np.pi), startcoor[1] + r * np.sin((i / M) * 2 * np.pi), startcoor[2]])
-        update_fig(hl, [startcoor[0] + r * np.cos(((i+1)/ M) * 2 * np.pi), startcoor[1] + r * np.sin(((i+1) / M) * 2 * np.pi), startcoor[2]])
+        update_fig(hl, [r * (np.cos((i/M) * 2 * np.pi) * np.cos(theta) * np.cos(psi) - np.sin((i/M) * 2 * np.pi) * np.sin(psi)) + startcoor[0], r * (np.cos((i/M) * 2 * np.pi) * np.cos(theta) * np.sin(psi) + np.sin((i/M) * 2 * np.pi) * np.cos(psi)) + startcoor[1], r * np.cos((i/M) * 2 * np.pi) * np. sin(theta) + startcoor[2]])
+        update_fig(hl, [r * (np.cos(((i+1)/M) * 2 * np.pi) * np.cos(theta) * np.cos(psi) - np.sin(((i+1)/M) * 2 * np.pi) * np.sin(psi)) + startcoor[0], r * (np.cos(((i+1)/M) * 2 * np.pi) * np.cos(theta) * np.sin(psi) + np.sin(((i+1)/M) * 2 * np.pi) * np.cos(psi)) + startcoor[1], r * np.cos(((i+1)/M) * 2 * np.pi) * np. sin(theta) + startcoor[2]])
         update_fig(hl, [startcoor[0], startcoor[1], startcoor[2]])
     return hl
 
