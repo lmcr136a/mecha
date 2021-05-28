@@ -4,7 +4,7 @@ import time
 from plots import update_fig
 N=200
 
-# 직사각형, 채워진 직사각형, 직육면체
+# 직사각형, 채워진 직사각형, 직육면체, 직선
 def rect(hl, startcoor, endcoor):
     update_fig(hl, startcoor)
     update_fig(hl, [startcoor[0], endcoor[1],startcoor[2]])
@@ -41,3 +41,10 @@ def cube(hl, startcoor, endcoor):
     update_fig(hl, [endcoor[0], startcoor[1], endcoor[2]])
     update_fig(hl, [startcoor[0], startcoor[1], endcoor[2]])
     return hl
+
+
+def line(hl, startcoor, endcoor):
+    update_fig(hl, startcoor)
+    update_fig(hl, endcoor)
+    return hl
+

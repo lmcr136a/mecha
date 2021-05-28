@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "cube"
+MODE = "line"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -74,6 +74,7 @@ def clicked(hl, clicked_or_released, map_ax, newdata, color):
 def get_mode_function(mode_name):
     return {
         "default": update_fig,
+        "line": line,
         "rect": rect,
         "colored_rect": colored_rect,
         "cube": cube,
@@ -163,7 +164,7 @@ if __name__ == "__main__":
             print("removed")
             hl.remove()
 
-        elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
+        elif mode in ["rect", "line", "colored_rect", "circle", "colored_circle", "cube"]:
             if clicked_or_released == "clicked":
                 hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
                 start_coor = newdata
