@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "sphere"
+MODE = "circle"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -113,6 +113,7 @@ if __name__ == "__main__":
     prestate = 0
     start_coor = [0, 0, 0]
     end_coor = [0, 0, 0]
+    cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
     color = 'w'
     color_index = 0
     for dumm in dummy:
@@ -158,6 +159,8 @@ if __name__ == "__main__":
             cancel_fig(hl)
         else:
             pass
+        cursor.remove()
+        cursor = map_ax.scatter3D(newdata[0], newdata[1], newdata[2], c=newdata[2], cmap='Accent')
 
         prestate = left_pressed
         plt.pause(PLT_TIME_SLEEP)
