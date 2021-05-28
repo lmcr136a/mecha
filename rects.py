@@ -22,6 +22,7 @@ def colored_rect(hl, startcoor, endcoor):
         update_fig(hl, startcoor)
     return hl
 
+
 def cube(hl, startcoor, endcoor):
     update_fig(hl, startcoor)
     update_fig(hl, [startcoor[0], endcoor[1], startcoor[2]])

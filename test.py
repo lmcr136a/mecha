@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "cube"
+MODE = "rect"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -84,17 +84,25 @@ def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
     third_pressed = i
     dummy = []
     for j in range(int(i)):
-        if j <= first_pressed:
+        if j <= first_pressed:      ### 0~30 누르고 있음
             dummy.append([mode, True, False, j, j, j])
-        if first_pressed < j <= interval1:
+        if first_pressed < j <= interval1:   # 10분동안 쉼
             dummy.append([mode, False, False, j, j, j])
-        if interval1 < j < second_pressed:
+
+        if interval1 < j < second_pressed:   ### 40~60 누르고 있음
             dummy.append([mode, True, False, j, j, j])
 
-        if j == second_pressed:
-            dummy.append(["color", True, False, j, j, j])
+        if second_pressed <= j < second_pressed + 5:   # 40 ~ 45 그냥 있음
+            dummy.append([mode, False, False, j, j, j])
 
-        if second_pressed < j <= interval2:
+        if j == second_pressed+5:
+            dummy.append(["color", True, False, j, j, j])   #### 45에서 color 모드에서 클릭
+        if j == second_pressed+6:
+            dummy.append(["color", False, False, j, j, j])
+        if j == second_pressed+7:
+            dummy.append([mode, False, True, j, j, j])    #### 47 : remove 버튼 누름
+
+        if second_pressed+7 < j <= interval2:
             dummy.append([mode, False, False, j, j, j])
         if interval2 < j <= third_pressed:
             dummy.append([mode, True, False, j, j, j])
@@ -126,6 +134,7 @@ if __name__ == "__main__":
         newdata = (float(cx), float(cy), float(cz))
 
         if dumm[-3:] == [0,0,0]:
+            print("get new hl")
             hl = get_3dfig_seed(map_ax, newdata)
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, sphere, color
@@ -134,13 +143,20 @@ if __name__ == "__main__":
 
         print("dumm: ", dumm, clicked_or_released, COLORS[color_index])
 
-        if clicked_or_released == "clicked":
-            hl = get_3dfig_seed(map_ax, newdata, color)
-            start_coor = newdata
+
+        if right_pressed:
+            print("removed")
+            hl.remove()
+
         elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
+            if clicked_or_released == "clicked":
+                print("get new hl")
+                hl = get_3dfig_seed(map_ax, newdata, color)
+                start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor)
+
         elif mode in ["sphere"]:
             if clicked_or_released == "released":
                 end_coor = newdata
@@ -152,10 +168,9 @@ if __name__ == "__main__":
             color_index += 1
             if color_index > len(COLORS):
                 color_index = 0
+
         elif left_pressed and mode == "default":
             mode_function(hl, newdata)
-        elif right_pressed:
-            cancel_fig(hl)
         else:
             pass
 
