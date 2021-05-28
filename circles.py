@@ -26,7 +26,7 @@ def colored_circle(hl, startcoor, endcoor):
         update_fig(hl, [startcoor[0], startcoor[1], startcoor[2]])
     return hl
 
-#circle 함수 써서 하는 방법 -> 오래 걸림?
+#circle 함수 써서 하는 방법
 # def sphere(hl, startcoor, endcoor):
 #     R = math.sqrt(pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2) + pow(startcoor[2] - endcoor[2], 2))
 #     for i in range(N):
