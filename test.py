@@ -15,8 +15,8 @@ from rects import *
 # git pull << 받아오기
 
 ITER = 10000
-PORT = "COM3"
-FREQ = 9600
+PORT = "COM6"
+FREQ = 115200
 XLIM = 100
 YLIM = 100
 ZLIM = 100
@@ -158,7 +158,6 @@ if __name__ == "__main__":
         mode_function = get_mode_function(mode)
 
         print("dumm: ", dumm, clicked_or_released, COLORS[color_index])
-
 
         if right_pressed:
             print("removed")
