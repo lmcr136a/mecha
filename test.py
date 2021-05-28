@@ -20,7 +20,7 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "default"
+MODE = "sphere"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
@@ -56,7 +56,7 @@ def whether_clicked(left_pressed, past_left_pressed):
         return "clicked"
     elif past_left_pressed and not left_pressed: # 눌렸었는데 안눌림
         return "released"
-    elif not past_left_pressed and left_pressed: # 떼진상태
+    elif not past_left_pressed and not left_pressed: # 떼진상태
         return "not changed"
     else:
         print("Error in whether_clicked function")
@@ -71,6 +71,7 @@ def get_mode_function(mode_name):
         "cube": cube,
         "circle": circle,
         "colored_circle": colored_circle,
+        "sphere": sphere,
         "color": color,
     }[mode_name]
 
@@ -110,8 +111,8 @@ if __name__ == "__main__":
     map_ax = get_axis(mapp)
     plt.show(block=False)
     prestate = 0
-    start_coor = 0
-    end_coor = 0
+    start_coor = [0, 0, 0]
+    end_coor = [0, 0, 0]
     color = 'w'
     color_index = 0
     for dumm in dummy:
@@ -127,7 +128,7 @@ if __name__ == "__main__":
         if dumm[-3:] == [0,0,0]:
             hl = get_3dfig_seed(map_ax, newdata)
 
-        # Mode: default, rect, colored_rect, circle, colored_circle, cube, color
+        # Mode: default, rect, colored_rect, circle, colored_circle, cube, sphere, color
         clicked_or_released = whether_clicked(left_pressed, prestate)
         mode_function = get_mode_function(mode)
 
@@ -135,12 +136,16 @@ if __name__ == "__main__":
 
         if clicked_or_released == "clicked":
             hl = get_3dfig_seed(map_ax, newdata, color)
+            start_coor = newdata
         elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
-            if clicked_or_released == "clicked":
-                start_coor = newdata
-            elif clicked_or_released == "released":
+            if clicked_or_released == "released":
                 end_coor = newdata
                 mode_function(hl, start_coor, end_coor)
+        elif mode in ["sphere"]:
+            if clicked_or_released == "released":
+                end_coor = newdata
+                mode_function(hl, start_coor, end_coor, map_ax)
+                #mode_function(hl, start_coor, end_coor)
         
         elif left_pressed and mode == "color":
             color = COLORS[color_index]
