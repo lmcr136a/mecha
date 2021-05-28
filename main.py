@@ -81,6 +81,7 @@ def get_mode_function(mode_name):
         "color": color,
     }[mode_name]
 
+
 if __name__ == "__main__":
     arduino = serial.Serial(PORT, FREQ)
 
@@ -107,9 +108,6 @@ if __name__ == "__main__":
         left_pressed = bin_to_bool(left_pressed)
         right_pressed = bin_to_bool(right_pressed)
         newdata = (float(cx), float(cy), float(cz))
-
-        if i == 0:
-            hl = get_3dfig_seed(map_ax, newdata)
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, color
         clicked_or_released = whether_clicked(left_pressed, prestate)
