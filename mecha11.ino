@@ -44,8 +44,7 @@ void loop() {
 
   newCl = digitalRead(cl);
   if(newCl != preCl){
-    if(digitalRead(dt)!=newCl){
-      count--;
+    count++;
     }
     else{
       count++;
@@ -89,15 +88,6 @@ void loop() {
   float ty = pulseIn(echoy,HIGH,30000); float dy = ty * 0.17;
   digitalWrite(trigz,HIGH); delayMicroseconds(10); digitalWrite(trigz,LOW);
   float tz = pulseIn(echoz,HIGH,30000); float dz = tz * 0.17;
-//  if (abs(dx-lx) > error) {
-//    modstr = "X";
-//  } else if (abs(dy-ly) > error) {
-//    modstr = "X";
-//  } else if (abs(dz-lz) > error){
-//    modstr = "X";
-// }
-  //이상한 값이 나오면 X 출력
-//  lx = dx;  ly = dy; lz = dz;
 
   bt.println(String(AState)+","+String(BState)+","+modstr+","+String(dx)+","+String(dy)+","+String(dz));
   delay(50);
