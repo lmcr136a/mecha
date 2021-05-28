@@ -20,10 +20,11 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "colored_rect"
+MODE = "default"
 TIME_SLEEP = 1.0e-4
 PLT_TIME_SLEEP = 1.0e-4
 COLORS = ['r', 'b', 'y', 'k', 'g']
+
 
 def get_ardu_line(arduino):
         ardu = arduino.readline()
@@ -127,6 +128,8 @@ if __name__ == "__main__":
 
     mapp = plt.figure()
     map_ax = get_axis(mapp)
+    mng = plt.get_current_fig_manager()
+    mng.full_screen_toggle()
     plt.show(block=False)
     prestate = 0
     start_coor = [0, 0, 0]
