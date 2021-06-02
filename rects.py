@@ -68,7 +68,12 @@ def colored_rect(hl, startcoor, endcoor):
             update_fig(hl, [((N - i) / N) * startcoor[0] + (i / N) * endcoor[0], startcoor[1], startcoor[2]])
             update_fig(hl, startcoor)
     else:
-        print("error!")
+        for i in range(N):
+            update_fig(hl, [startcoor[0], endcoor[1], startcoor[2]])
+            update_fig(hl, [((N - i) / N) * startcoor[0] + (i / N) * endcoor[0], endcoor[1], startcoor[2]])
+            update_fig(hl, [((N - i) / N) * startcoor[0] + (i / N) * endcoor[0], startcoor[1], startcoor[2]])
+            update_fig(hl, startcoor)
+        #print("error!")
     return hl
 
 
