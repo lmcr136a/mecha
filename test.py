@@ -88,33 +88,42 @@ def get_mode_function(mode_name):
 def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
     iblock = round(iter/10)
     dummy=[]
-    for i in range(iblock+2):
-        dummy.append(["rect", False, False, i, i, i])
+    for i in range(iter):
+    # for i in range(iblock+2):
+        dummy.append(["default", False, False, i, i, i])
     
     for i in range(round(iblock*1)):
         dummy[i][1] = True
 
-    # for i in range(iblock*3, iblock*4):
-    #     dummy[i][1] = True
+    for i in range(iblock*3, iblock*4):
+        dummy[i][1] = True
 
-    # for i in range(5*iblock, 6*iblock):
-    #     dummy[i][0] = "circle"
-    #     dummy[i][1] = True
+    for i in range(5*iblock, 6*iblock):
+        dummy[i][0] = "circle"
+        dummy[i][1] = True
+        if(i==6*iblock-1):
+            dummy[i][1] = False
 
-    # for i in range(7*iblock, 8*iblock):  # 4개 그리고 
-    #     dummy[i][0] = "cube"
-    #     dummy[i][1] = True
+    for i in range(7*iblock, 8*iblock):  # 4개 그리고
+        dummy[i][0] = "cube"
+        dummy[i][1] = True
+        if(i==8*iblock-1):
+            dummy[i][1] = False
 
-    # for i in range(8*iblock +2, 8*iblock+5): # 3개 지울것임
-    #     dummy[i][2] = True
 
-    # for i in range(8*iblock +7, 8*iblock+9): # 3개 지울것임
-    #     dummy[i][0] = "color"
-    #     dummy[i][1] = True
+    for i in range(8*iblock +2, 8*iblock+5): # 3개 지울것임
+        dummy[i][2] = True
+
+    for i in range(8*iblock +7, 8*iblock+9): # 3개 지울것임
+        dummy[i][0] = "color"
+        dummy[i][1] = True
         
-    # for i in range(9*iblock, 10*iblock):
-    #     dummy[i][0] = "rect"
-    #     dummy[i][1] = True
+    for i in range(9*iblock, 10*iblock):
+        dummy[i][0] = "rect"
+        dummy[i][1] = True
+        if(i==10*iblock-1):
+            dummy[i][1] = False
+
 
     return dummy
 
