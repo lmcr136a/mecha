@@ -15,8 +15,8 @@ from rects import *
 # git pull << 받아오기
 
 ITER = 10000
-PORT = "COM3"
-FREQ = 9600
+PORT = "COM6"
+FREQ = 115200
 XLIM = 100
 YLIM = 100
 ZLIM = 100
@@ -74,6 +74,7 @@ def clicked(hl, clicked_or_released, map_ax, newdata, color):
 def get_mode_function(mode_name):
     return {
         "default": update_fig,
+        "line": line,
         "rect": rect,
         "colored_rect": colored_rect,
         "cube": cube,
@@ -150,17 +151,24 @@ if __name__ == "__main__":
 
         print("dumm: ", dumm, clicked_or_released, COLORS[color_index])
 
-
         if right_pressed:
             print("removed")
             hl.remove()
 
-        elif mode in ["rect", "colored_rect", "circle", "colored_circle", "cube"]:
+        elif mode in ["rect", "line", "colored_rect", "cube"]:
             if clicked_or_released == "clicked":
                 hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
                 start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
+                mode_function(hl, start_coor, end_coor)
+
+        elif mode in ["circle", "colored_circle"]:
+            if clicked_or_released == "clicked":
+                start_coor = newdata
+            if clicked_or_released == "released":
+                end_coor = newdata
+                hl = get_3dfig_seed(map_ax, newdata, color)
                 mode_function(hl, start_coor, end_coor)
 
         elif mode in ["sphere"]:

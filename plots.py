@@ -3,9 +3,12 @@ import serial
 import time
 from matplotlib import pyplot as plt
 
-
 def update_fig(hl, new_data):
     xdata, ydata, zdata = hl._verts3d
+    limit = 1.0e3
+    std = abs(xdata[-1] - new_data[0]) + abs(ydata[-1] - new_data[1]) + abs(zdata[-1] - new_data[2])
+    if(std > limit):
+        return hl
     hl.set_xdata(np.array(np.append(xdata, new_data[0])))
     hl.set_ydata(np.array(np.append(ydata, new_data[1])))
     hl.set_3d_properties(np.array(np.append(zdata, new_data[2])))
