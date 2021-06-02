@@ -27,7 +27,11 @@ def rect(hl, startcoor, endcoor):
         update_fig(hl, [endcoor[0], startcoor[1], startcoor[2]])
         update_fig(hl, startcoor)
     else:
-        print(f"error! rect_x:{rect_x}, rect_y:{rect_y}, rect_z:{rect_z}")
+        update_fig(hl, [startcoor[0], endcoor[1], startcoor[2]])
+        update_fig(hl, [endcoor[0], endcoor[1], startcoor[2]])
+        update_fig(hl, [endcoor[0], startcoor[1], startcoor[2]])
+        update_fig(hl, startcoor)
+        #print(f"error! rect_x:{rect_x}, rect_y:{rect_y}, rect_z:{rect_z}")
     return hl
 
 
