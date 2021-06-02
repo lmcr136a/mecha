@@ -27,7 +27,7 @@ def rect(hl, startcoor, endcoor):
         update_fig(hl, [endcoor[0], startcoor[1], startcoor[2]])
         update_fig(hl, startcoor)
     else:
-        print("error!")
+        print(f"error! rect_x:{rect_x}, rect_y:{rect_y}, rect_z:{rect_z}")
     return hl
 
 
@@ -69,6 +69,7 @@ def colored_rect(hl, startcoor, endcoor):
 
 
 def cube(hl, startcoor, endcoor):
+    print(hl)
     update_fig(hl, startcoor)
     update_fig(hl, [startcoor[0], endcoor[1], startcoor[2]])
     update_fig(hl, [endcoor[0], endcoor[1], startcoor[2]])

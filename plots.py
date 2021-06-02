@@ -8,6 +8,7 @@ def update_fig(hl, new_data):
     limit = 1.0e3
     std = abs(xdata[-1] - new_data[0]) + abs(ydata[-1] - new_data[1]) + abs(zdata[-1] - new_data[2])
     if(std > limit):
+        print("\n error~ ")
         return hl
     hl.set_xdata(np.array(np.append(xdata, new_data[0])))
     hl.set_ydata(np.array(np.append(ydata, new_data[1])))
