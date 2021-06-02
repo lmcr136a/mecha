@@ -20,9 +20,9 @@ FREQ = 9600
 XLIM = 100
 YLIM = 100
 ZLIM = 100
-MODE = "cube"
-TIME_SLEEP = 1.0e-4
-PLT_TIME_SLEEP = 1.0e-4
+MODE = "default"
+TIME_SLEEP = 1.0e-5
+PLT_TIME_SLEEP = 1.0e-5
 COLORS = ['r', 'b', 'y', 'k', 'g']
 
 
@@ -84,42 +84,34 @@ def get_mode_function(mode_name):
     }[mode_name]
 
 
-def make_dummy_input(mode="default", i=100):  # 3 1 2 1 3
-    first_pressed = round(i * 3/10)
-    interval1 = round(i * 4/10)
-    second_pressed = round(i * 6/10)
-    interval2 = round(i * 7/10)
-    third_pressed = i
-    dummy = []
-    for j in range(int(i)):
-        if j <= first_pressed - 7:      ### 0~30 누르고 있음
-            dummy.append([mode, True, False, j, j, j])
-        if j == first_pressed - 6:      ### 값이 튐
-            dummy.append([mode, True, False, 500, j, j])
-        if first_pressed - 6 < j <= first_pressed:      ### 0~30 누르고 있음
-            dummy.append([mode, True, False, j, j, j])
+def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
+    iblock = round(iter/10)
+    dummy=[]
+    for i in range(iter):
+        dummy.append([mode, False, False, i, i, i])
+    
+    for i in range(round(iblock*2)):
+        dummy[i][1] = True
 
-        if first_pressed < j <= interval1:   # 10분동안 쉼
-            dummy.append([mode, False, False, j, j, j])
-        if interval1 < j < second_pressed:   ### 40~60 누르고 있음
-            dummy.append([mode, True, False, j, j, j])
-        if second_pressed <= j < second_pressed + 5:   # 40 ~ 45 그냥 있음
-            dummy.append([mode, False, False, j, j, j])
+    for i in range(iblock*3, iblock*4):
+        dummy[i][1] = True
 
-        if j == second_pressed+5:
-            dummy.append(["color", True, False, j, j, j])   #### 45에서 color 모드에서 클릭
-        if j == second_pressed+6:
-            dummy.append(["color", False, False, j, j, j])
-        if j == second_pressed+7:
-            dummy.append([mode, False, True, j, j, j])    #### 47 : remove 버튼 누름
+    for i in range(5*iblock, 6*iblock):
+        dummy[i][1] = True
 
-        if second_pressed+7 < j <= interval2:
-            dummy.append([mode, False, False, j, j, j])
-        if interval2 < j <= third_pressed:
-            dummy.append([mode, True, False, j, j, j])
-    dummy.append([mode, False, False, i, i, i])
-    dummy.append([mode, False, False, i, i, i])
-    dummy.append([mode, False, False, i, i, i])
+    for i in range(7*iblock, 8*iblock):  # 4개 그리고 
+        dummy[i][1] = True
+
+    for i in range(8*iblock +2, 8*iblock+5): # 3개 지울것임
+        dummy[i][2] = True
+
+    for i in range(8*iblock +7, 8*iblock+9): # 3개 지울것임
+        dummy[i][0] = "color"
+        dummy[i][1] = True
+        
+    for i in range(9*iblock, 10*iblock):
+        dummy[i][1] = True
+
     return dummy
 
 
@@ -128,8 +120,8 @@ if __name__ == "__main__":
 
     mapp = plt.figure()
     map_ax = get_axis(mapp)
-    mng = plt.get_current_fig_manager()
-    mng.full_screen_toggle()
+    #mng = plt.get_current_fig_manager()
+    #mng.full_screen_toggle()
     plt.show(block=False)
     prestate = 0
     start_coor = [0, 0, 0]
