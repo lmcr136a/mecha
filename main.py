@@ -122,9 +122,12 @@ if __name__ == "__main__":
 
         print("ardu: ", ardu, clicked_or_released, COLORS[color_index])
 
-        if right_pressed:
-            hls[len(hls)-1].remove()
-            del hls[len(hls)-1]
+        if right_pressed and clicked_or_released == "clicked":
+            try: 
+                hls[len(hls)-1].remove()
+                del hls[len(hls)-1]
+            except:
+                print("못지워! 지우지마! 안지워!")
             print("removed, ", len(hls))
 
         elif mode in ["rect", "line", "colored_rect", "cube"]:
