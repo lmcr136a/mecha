@@ -20,8 +20,8 @@ FREQ = 115200
 XLIM = 1000
 YLIM = 1000
 ZLIM = 1000
-TIME_SLEEP = 1.0e-4
-PLT_TIME_SLEEP = 1.0e-4
+TIME_SLEEP = 1.0e-5
+PLT_TIME_SLEEP = 1.0e-5
 COLORS = ['r', 'b', 'y', 'k', 'g']
 
 
@@ -63,10 +63,12 @@ def whether_clicked(left_pressed, past_left_pressed):
         return "not changed"
         
 
-def clicked(hl, clicked_or_released, map_ax, newdata, color):
+def clicked(hls, clicked_or_released, map_ax, newdata, color):
     if clicked_or_released == "clicked":
-        hl = get_3dfig_seed(map_ax, newdata, color)
-    return hl
+        print("get new hl")
+        hls.append(get_3dfig_seed(map_ax, newdata, color))
+    return hls
+
 
 def get_mode_function(mode_name):
     return {
@@ -97,6 +99,7 @@ if __name__ == "__main__":
 
     color = 'w'
     color_index = 0
+    hls=[]
 
     for i in range(ITER):
         ardu = get_ardu_line(arduino)
@@ -110,36 +113,42 @@ if __name__ == "__main__":
         newdata = (float(cx), float(cy), float(cz))
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, color
+        for txt in map_ax.texts:
+            txt.set_visible(False)
+        map_ax.text(1,1,ZLIM*1.3, f"DRAWING MODE: {mode.upper()}", color="white", bbox={'edgecolor':"lavender", 'facecolor': 'lightsteelblue', 'boxstyle':'round,pad=1'})
+
         clicked_or_released = whether_clicked(left_pressed, prestate)
         mode_function = get_mode_function(mode)
 
         print("ardu: ", ardu, clicked_or_released, COLORS[color_index])
 
         if right_pressed:
-            print("removed")
-            hl.remove()
+            hls[len(hls)-1].remove()
+            del hls[len(hls)-1]
+            print("removed, ", len(hls))
 
         elif mode in ["rect", "line", "colored_rect", "cube"]:
             if clicked_or_released == "clicked":
-                hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
+                hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
                 start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
-                mode_function(hl, start_coor, end_coor)
+                mode_function(hls[len(hls)-1], start_coor, end_coor)
 
         elif mode in ["circle", "colored_circle"]:
             if clicked_or_released == "clicked":
                 start_coor = newdata
             if clicked_or_released == "released":
                 end_coor = newdata
-                hl = get_3dfig_seed(map_ax, newdata, color)
-                mode_function(hl, start_coor, end_coor)
+                hls.append(get_3dfig_seed(map_ax, newdata, color))
+                mode_function(hls[len(hls)-1], start_coor, end_coor)
+
 
         elif mode in ["sphere"]:
-            hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
+            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
             if clicked_or_released == "released":
                 end_coor = newdata
-                mode_function(hl, start_coor, end_coor, map_ax)
+                mode_function(hls[len(hls)-1], start_coor, end_coor, map_ax)
                 # mode_function(hl, start_coor, end_coor)
 
         elif left_pressed and mode == "color":
@@ -149,8 +158,8 @@ if __name__ == "__main__":
             color = COLORS[color_index]
 
         elif left_pressed and mode == "default":
-            hl = clicked(hl, clicked_or_released, map_ax, newdata, color)
-            mode_function(hl, newdata)
+            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+            mode_function(hls[len(hls)-1], newdata)
         else:
             pass
 
