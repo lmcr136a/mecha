@@ -93,6 +93,7 @@ if __name__ == "__main__":
 #    mng.full_screen_toggle()
     plt.show(block=False)
     prestate = 0
+    right_prestate = 0
     start_coor = [0, 0, 0]
     end_coor = [0, 0, 0]
     cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
@@ -118,11 +119,12 @@ if __name__ == "__main__":
         map_ax.text(1,1,ZLIM*1.3, f"DRAWING MODE: {mode.upper()}", color="white", bbox={'edgecolor':"lavender", 'facecolor': 'lightsteelblue', 'boxstyle':'round,pad=1'})
 
         clicked_or_released = whether_clicked(left_pressed, prestate)
+        right_clicked_or_released = whether_clicked(right_pressed, right_prestate)
         mode_function = get_mode_function(mode)
 
         print("ardu: ", ardu, clicked_or_released, COLORS[color_index])
 
-        if right_pressed and clicked_or_released == "clicked":
+        if right_pressed and right_clicked_or_released == "clicked":
             try: 
                 hls[len(hls)-1].remove()
                 del hls[len(hls)-1]
@@ -170,6 +172,7 @@ if __name__ == "__main__":
         cursor = map_ax.scatter3D(newdata[0], newdata[1], newdata[2], c=newdata[2], cmap='Accent')
 
         prestate = left_pressed
+        right_prestate = right_pressed
         plt.pause(PLT_TIME_SLEEP)
         time.sleep(TIME_SLEEP)
     time.sleep(2)
