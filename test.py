@@ -88,40 +88,53 @@ def get_mode_function(mode_name):
 def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
     iblock = round(iter/10)
     dummy=[]
-
+    def f(i):
+        li = list(np.linspace(1, 40, 2*iblock))
+        li += list(np.linspace(40, 10, 2*iblock))
+        li += list(np.linspace(10, 50, 2*iblock))
+        li += list(np.linspace(51, 55, 2*iblock))
+        li += list(np.linspace(55, 100, 2*iblock))
+        print(len(li), li)
+        return li[i]
+        
     for i in range(iter):
-        dummy.append([mode, False, False, i, i, i])
+        dummy.append([mode, False, False, f(i), f(i), i])
 
-    for i in range(round(iblock*1)):
+    for i in range(40):
         dummy[i][1] = True
-
-    for i in range(iblock*3, iblock*4):
-        dummy[i][0] = "rect"
-        dummy[i][1] = True       
-        if(i==4*iblock-1):
-            dummy[i][1] = False
-
-    for i in range(5*iblock, 6*iblock):
-        dummy[i][0] = "circle"
+    for i in range(42, 80):
         dummy[i][1] = True
-        if(i==6*iblock-1):
-            dummy[i][1] = False
-
-    for i in range(7*iblock, 8*iblock):  # 4개 그리고
-        dummy[i][0] = "cube"
-        dummy[i][1] = True
-        if(i==8*iblock-1):
-            dummy[i][1] = False
-
-    for i in range(8*iblock +7, 8*iblock+9): # 3개 지울것임
-        dummy[i][0] = "color"
+    for i in range(82, 99):
         dummy[i][1] = True
         
-    for i in range(9*iblock, 10*iblock-3):
-        dummy[i][0] = "rect"
-        dummy[i][1] = True
-        if(i==10*iblock-4):
-            dummy[i][1] = False
+
+    # for i in range(iblock*3, iblock*4):
+    #     dummy[i][0] = "rect"
+    #     dummy[i][1] = True       
+    #     if(i==4*iblock-1):
+    #         dummy[i][1] = False
+
+    # for i in range(5*iblock, 6*iblock):
+    #     dummy[i][0] = "circle"
+    #     dummy[i][1] = True
+    #     if(i==6*iblock-1):
+    #         dummy[i][1] = False
+
+    # for i in range(7*iblock, 8*iblock):  # 4개 그리고
+    #     dummy[i][0] = "cube"
+    #     dummy[i][1] = True
+    #     if(i==8*iblock-1):
+    #         dummy[i][1] = False
+
+    # for i in range(8*iblock +7, 8*iblock+9): # 3개 지울것임
+    #     dummy[i][0] = "color"
+    #     dummy[i][1] = True
+        
+    # for i in range(9*iblock, 10*iblock-3):
+    #     dummy[i][0] = "rect"
+    #     dummy[i][1] = True
+    #     if(i==10*iblock-4):
+    #         dummy[i][1] = False
     return dummy
 
 
@@ -141,6 +154,7 @@ if __name__ == "__main__":
     color = 'w'
     color_index = 0
     hls=[]
+    coor_list=[[], [], []]
     for dumm in dummy:
         try:
             mode, left_pressed, right_pressed, cx, cy, cz = dumm
@@ -149,7 +163,7 @@ if __name__ == "__main__":
             continue
         left_pressed = bin_to_bool(left_pressed)
         right_pressed = bin_to_bool(right_pressed)
-        newdata = (float(cx), float(cy), float(cz))
+        newdata = [float(cx), float(cy), float(cz)]
 
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, sphere, color
@@ -162,7 +176,7 @@ if __name__ == "__main__":
 
         print("dumm: ", dumm, clicked_or_released, COLORS[color_index], "  ::  ",len(hls))
 
-        if right_pressed:
+        if right_pressed and clicked_or_released == "clicked":
             hls[len(hls)-1].remove()
             del hls[len(hls)-1]
             print("removed, ", len(hls))
@@ -198,7 +212,7 @@ if __name__ == "__main__":
 
         elif left_pressed and mode == "default":
             hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
-            mode_function(hls[len(hls)-1], newdata)
+            mode_function(hls[len(hls)-1], coor_list, newdata)
         else:
             pass
 
