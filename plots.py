@@ -3,6 +3,7 @@ import serial
 import time
 from matplotlib import pyplot as plt
 
+
 def update_fig(hl, new_data):
     xdata, ydata, zdata = hl._verts3d
     limit = 1.0e3
