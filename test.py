@@ -88,15 +88,10 @@ def get_mode_function(mode_name):
 def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
     iblock = round(iter/10)
     dummy=[]
-<<<<<<< HEAD
-    for i in range(iter+10):
-    # for i in range(iblock+2):
-        dummy.append(["default", False, False, i, i, i])
-=======
+
     for i in range(iter):
         dummy.append([mode, False, False, i, i, i])
->>>>>>> ca4a03ad1b672a3d742933bbedc60e4e409de243
-    
+
     for i in range(round(iblock*1)):
         dummy[i][1] = True
 
@@ -142,8 +137,6 @@ if __name__ == "__main__":
     start_coor = [0, 0, 0]
     end_coor = [0, 0, 0]
     cursor = map_ax.scatter3D(0, 0, 0, c = 0, cmap='Accent')
-    text = map_ax.text(1, 1, ZLIM * 1.3, f"DRAWING MODE: {'default'}", color="white",
-                       bbox={'edgecolor': "lavender", 'facecolor': 'lightsteelblue', 'boxstyle': 'round,pad=1'})
 
     color = 'w'
     color_index = 0
@@ -160,16 +153,10 @@ if __name__ == "__main__":
 
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, sphere, color
-<<<<<<< HEAD
 
-        text.remove()
-        text = map_ax.text(1,1,ZLIM*1.3, f"DRAWING MODE: {mode.upper()}", color="white", bbox={'edgecolor':"lavender", 'facecolor': 'lightsteelblue', 'boxstyle':'round,pad=1'})
-
-=======
         for txt in map_ax.texts:
             txt.set_visible(False)
         map_ax.text(1,1,ZLIM*1.3, f"DRAWING MODE: {mode.upper()}", color="white", bbox={'edgecolor':"lavender", 'facecolor': 'lightsteelblue', 'boxstyle':'round,pad=1'})
->>>>>>> ca4a03ad1b672a3d742933bbedc60e4e409de243
         clicked_or_released = whether_clicked(left_pressed, prestate)
         mode_function = get_mode_function(mode)
 
