@@ -9,6 +9,8 @@ from plots import *
 from colors import *
 from circles import *
 from rects import *
+from multiprocessing import Process, Queue
+
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
 # git push
@@ -17,12 +19,13 @@ from rects import *
 ITER = 10000
 PORT = "COM6"
 FREQ = 115200
-XLIM = 1000
-YLIM = 1000
-ZLIM = 1000
+XLIM = 500
+YLIM = 500
+ZLIM = 500
 TIME_SLEEP = 1.0e-5
 PLT_TIME_SLEEP = 1.0e-5
 COLORS = ['r', 'b', 'y', 'k', 'g']
+
 
 
 def get_ardu_line(arduino):
