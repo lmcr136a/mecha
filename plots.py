@@ -19,35 +19,35 @@ def update_fig(hl, new_data):
     return hl
 
 
-# def add_noise(data):
-#     new = []
-#     for d in data:
-#         new.append(d+0.0001*np.random.random_sample(1)[0])
-#     return new
-#
-#
-# def interpo(hl):
-#     """
-#     input: hl
-#     output: interpolated 된 x, y, z데이터
-#     """
-#     xdata, ydata, zdata = hl._verts3d
-#     xdata = add_noise(xdata)
-#     ydata = add_noise(ydata)
-#     zdata = add_noise(zdata)
-#     tck, u = interpolate.splprep([xdata, ydata, zdata], s=2)
-#     #x_knots, y_knots, z_knots = interpolate.splev(tck[0], tck)
-#     u_fine = np.linspace(0,1,len(xdata))
-#     x_fine, y_fine, z_fine = interpolate.splev(u_fine, tck)
-#     return [x_fine, y_fine, z_fine]
-#
-#
-# def interpo_update_fig(hls):
-#     interpo_datas = interpo(hls[len(hls)-1])
-#     hls[len(hls)-1].set_xdata(np.array(interpo_datas[0]))
-#     hls[len(hls)-1].set_ydata(np.array(interpo_datas[1]))
-#     hls[len(hls)-1].set_3d_properties(np.array(interpo_datas[2]))
-#     return hls
+def add_noise(data):
+    new = []
+    for d in data:
+        new.append(d+0.0001*np.random.random_sample(1)[0])
+    return new
+
+
+def interpo(hl):
+    """
+    input: hl
+    output: interpolated 된 x, y, z데이터
+    """
+    xdata, ydata, zdata = hl._verts3d
+    xdata = add_noise(xdata)
+    ydata = add_noise(ydata)
+    zdata = add_noise(zdata)
+    tck, u = interpolate.splprep([xdata, ydata, zdata], s=2)
+    #x_knots, y_knots, z_knots = interpolate.splev(tck[0], tck)
+    u_fine = np.linspace(0,1,len(xdata))
+    x_fine, y_fine, z_fine = interpolate.splev(u_fine, tck)
+    return [x_fine, y_fine, z_fine]
+
+
+def interpo_update_fig(hls):
+    interpo_datas = interpo(hls[len(hls)-1])
+    hls[len(hls)-1].set_xdata(np.array(interpo_datas[0]))
+    hls[len(hls)-1].set_ydata(np.array(interpo_datas[1]))
+    hls[len(hls)-1].set_3d_properties(np.array(interpo_datas[2]))
+    return hls
 
 
 def get_3dfig_seed(map_ax, start_point, color="w", show_axis=True):

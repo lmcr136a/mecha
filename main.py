@@ -168,8 +168,8 @@ if __name__ == "__main__":
             if left_pressed:
                 hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
                 mode_function(hls[len(hls)-1], newdata)
-            # if clicked_or_released == "released":
-            #     hls = interpo_update_fig(hls)
+            if clicked_or_released == "released":
+                hls = interpo_update_fig(hls)
         else:
             pass
 
