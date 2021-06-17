@@ -9,6 +9,8 @@ from plots import *
 from colors import *
 from circles import *
 from rects import *
+from multiprocessing import Process, Queue
+
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
 # git push
@@ -17,12 +19,13 @@ from rects import *
 ITER = 10000
 PORT = "COM6"
 FREQ = 115200
-XLIM = 1000
-YLIM = 1000
-ZLIM = 1000
+XLIM = 500
+YLIM = 500
+ZLIM = 500
 TIME_SLEEP = 1.0e-5
-PLT_TIME_SLEEP = 1.0e-2
+PLT_TIME_SLEEP = 1.5e-2
 COLORS = ['r', 'b', 'y', 'k', 'g']
+
 
 
 def get_ardu_line(arduino):
@@ -79,28 +82,28 @@ def get_mode_function(mode_name):
         "cube": cube,
         "circle": circle,
         "colored_circle": colored_circle,
-        "sphere": sphere,
+        # "sphere": sphere,
         "color": color,
     }[mode_name]
 
 
 if __name__ == "__main__":
-arduino = serial.Serial(PORT, FREQ)
+    arduino = serial.Serial(PORT, FREQ)
 
-map = plt.figure()
-map_ax = get_axis(map)
-#    mng = plt.get_current_fig_manager()
-#    mng.full_screen_toggle()
-plt.show(block=False)
-prestate = 0
-right_prestate = 0
-start_coor = [0, 0, 0]
-end_coor = [0, 0, 0]
-cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
+    map = plt.figure()
+    map_ax = get_axis(map)
+    #    mng = plt.get_current_fig_manager()
+    #    mng.full_screen_toggle()
+    plt.show(block=False)
+    prestate = 0
+    right_prestate = 0
+    start_coor = [0, 0, 0]
+    end_coor = [0, 0, 0]
+    cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
 
-color = 'w'
-color_index = 0
-hls=[]
+    color = 'w'
+    color_index = 0
+    hls=[]
 
     for i in range(ITER):
         ardu = get_ardu_line(arduino)
@@ -149,12 +152,12 @@ hls=[]
                 mode_function(hls[len(hls)-1], start_coor, end_coor)
 
 
-        elif mode in ["sphere"]:
-            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
-            if clicked_or_released == "released":
-                end_coor = newdata
-                mode_function(hls[len(hls)-1], start_coor, end_coor, map_ax)
-                # mode_function(hl, start_coor, end_coor)
+        # elif mode in ["sphere"]:
+        #     hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+        #     if clicked_or_released == "released":
+        #         end_coor = newdata
+        #         mode_function(hls[len(hls)-1], start_coor, end_coor, map_ax)
+        #         # mode_function(hl, start_coor, end_coor)
 
         elif left_pressed and mode == "color":
             color_index += 1
@@ -162,9 +165,12 @@ hls=[]
                 color_index = 0
             color = COLORS[color_index]
 
-        elif left_pressed and mode == "default":
-            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
-            mode_function(hls[len(hls)-1], newdata)
+        elif mode == "default":
+            if left_pressed:
+                hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+                mode_function(hls[len(hls)-1], newdata)
+            if clicked_or_released == "released":
+                hls = interpo_update_fig(hls)
         else:
             pass
 

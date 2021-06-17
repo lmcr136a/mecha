@@ -36,17 +36,17 @@ def colored_circle(hl, startcoor, endcoor):
 #     for i in range(N):
 #         circle(hl, [startcoor[0], startcoor[1], startcoor[2] - R * np.sin((i / N) * (1/2) * np.pi)], [startcoor[0] + R * np.cos((i / N) * (1/2) * np.pi), startcoor[1], startcoor[2]])
 #     return hl
-
-def sphere(hl, startcoor, endcoor, map_ax):
-    R = math.sqrt(
-        pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2) + pow(startcoor[2] - endcoor[2], 2))
-    N = 50
-    stride = 1
-    u = np.linspace(0, 2 * np.pi, N)
-    v = np.linspace(0, np.pi, N)
-    x = R * np.outer(np.cos(u), np.sin(v))
-    y = R * np.outer(np.sin(u), np.sin(v))
-    z = R * np.outer(np.ones(np.size(u)), np.cos(v))
-    map_ax.plot_surface(startcoor[0] + x, startcoor[1] + y, startcoor[2] + z, linewidth=0.0, cstride=stride, rstride=stride, color='w')
-    return map_ax
+#
+# def sphere(hl, startcoor, endcoor, map_ax):
+#     R = math.sqrt(
+#         pow(startcoor[0] - endcoor[0], 2) + pow(startcoor[1] - endcoor[1], 2) + pow(startcoor[2] - endcoor[2], 2))
+#     N = 50
+#     stride = 1
+#     u = np.linspace(0, 2 * np.pi, N)
+#     v = np.linspace(0, np.pi, N)
+#     x = R * np.outer(np.cos(u), np.sin(v))
+#     y = R * np.outer(np.sin(u), np.sin(v))
+#     z = R * np.outer(np.ones(np.size(u)), np.cos(v))
+#     map_ax.plot_surface(startcoor[0] + x, startcoor[1] + y, startcoor[2] + z, linewidth=0.0, cstride=stride, rstride=stride, color='w')
+#     return map_ax
 
