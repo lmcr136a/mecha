@@ -9,6 +9,7 @@ from plots import *
 from colors import *
 from circles import *
 from rects import *
+from multiprocessing import Process, Queue
 
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
@@ -18,11 +19,11 @@ from rects import *
 ITER = 10000
 PORT = "COM6"
 FREQ = 115200
-XLIM = 1000
-YLIM = 1000
-ZLIM = 1000
-TIME_SLEEP = 1.0e-4
-PLT_TIME_SLEEP = 1.0e-4
+XLIM = 500
+YLIM = 500
+ZLIM = 500
+TIME_SLEEP = 1.0e-5
+PLT_TIME_SLEEP = 1.5e-2
 COLORS = ['r', 'b', 'y', 'k', 'g']
 
 
@@ -64,10 +65,11 @@ def whether_clicked(left_pressed, past_left_pressed):
         return "not changed"
 
 
-def clicked(hl, clicked_or_released, map_ax, newdata, color):
+def clicked(hls, clicked_or_released, map_ax, newdata, color):
     if clicked_or_released == "clicked":
-        hl = get_3dfig_seed(map_ax, newdata, color)
-    return hl
+        print("get new hl")
+        hls.append(get_3dfig_seed(map_ax, newdata, color))
+    return hls
 
 
 def get_mode_function(mode_name):
@@ -93,13 +95,14 @@ if __name__ == "__main__":
     #    mng.full_screen_toggle()
     plt.show(block=False)
     prestate = 0
+    right_prestate = 0
     start_coor = [0, 0, 0]
     end_coor = [0, 0, 0]
-    pre_coor = [0, 0, 0]
     cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
 
     color = 'w'
     color_index = 0
+    hls = []
 
     for i in range(ITER):
         ardu = get_ardu_line(arduino)
@@ -111,42 +114,49 @@ if __name__ == "__main__":
         left_pressed = bin_to_bool(left_pressed)
         right_pressed = bin_to_bool(right_pressed)
         newdata = (float(cx), float(cy), float(cz))
-        if i == 0 :
-            avgdata = newdata
-        else :
-            avgdata = (0.5 * (newdata[0]+pre_coor[0]), 0.5 * (newdata[1]+pre_coor[1]), 0.5 * (newdata[2]+pre_coor[2]))
 
         # Mode: default, rect, colored_rect, circle, colored_circle, cube, color
+        for txt in map_ax.texts:
+            txt.set_visible(False)
+        map_ax.text(1, 1, ZLIM * 1.3, f"DRAWING MODE: {mode.upper()}", color="white",
+                    bbox={'edgecolor': "lavender", 'facecolor': 'lightsteelblue', 'boxstyle': 'round,pad=1'})
+
         clicked_or_released = whether_clicked(left_pressed, prestate)
+        right_clicked_or_released = whether_clicked(right_pressed, right_prestate)
         mode_function = get_mode_function(mode)
 
         print("ardu: ", ardu, clicked_or_released, COLORS[color_index])
 
-        if right_pressed:
-            print("removed")
-            hl.remove()
+        if right_pressed and right_clicked_or_released == "clicked":
+            try:
+                hls[len(hls) - 1].remove()
+                del hls[len(hls) - 1]
+            except:
+                print("못지워! 지우지마! 안지워!")
+            print("removed, ", len(hls))
 
         elif mode in ["rect", "line", "colored_rect", "cube"]:
             if clicked_or_released == "clicked":
-                hl = clicked(hl, clicked_or_released, map_ax, avgdata, color)
-                start_coor = avgdata
+                hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+                start_coor = newdata
             if clicked_or_released == "released":
-                end_coor = avgdata
-                mode_function(hl, start_coor, end_coor)
+                end_coor = newdata
+                mode_function(hls[len(hls) - 1], start_coor, end_coor)
 
         elif mode in ["circle", "colored_circle"]:
             if clicked_or_released == "clicked":
-                start_coor = avgdata
+                start_coor = newdata
             if clicked_or_released == "released":
-                end_coor = avgdata
-                hl = get_3dfig_seed(map_ax, avgdata, color)
-                mode_function(hl, start_coor, end_coor)
+                end_coor = newdata
+                hls.append(get_3dfig_seed(map_ax, newdata, color))
+                mode_function(hls[len(hls) - 1], start_coor, end_coor)
+
 
         elif mode in ["sphere"]:
-            hl = clicked(hl, clicked_or_released, map_ax, avgdata, color)
+            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
             if clicked_or_released == "released":
-                end_coor = avgdata
-                mode_function(hl, start_coor, end_coor, map_ax)
+                end_coor = newdata
+                mode_function(hls[len(hls) - 1], start_coor, end_coor, map_ax)
                 # mode_function(hl, start_coor, end_coor)
 
         elif left_pressed and mode == "color":
@@ -156,16 +166,16 @@ if __name__ == "__main__":
             color = COLORS[color_index]
 
         elif left_pressed and mode == "default":
-            hl = clicked(hl, clicked_or_released, map_ax, avgdata, color)
-            mode_function(hl, avgdata)
+            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+            mode_function(hls[len(hls) - 1], newdata)
         else:
             pass
 
         cursor.remove()
-        cursor = map_ax.scatter3D(avgdata[0], avgdata[1], avgdata[2], c=avgdata[2], cmap='Accent')
+        cursor = map_ax.scatter3D(newdata[0], newdata[1], newdata[2], c=newdata[2], cmap='Accent')
 
-        pre_coor = newdata
         prestate = left_pressed
+        right_prestate = right_pressed
         plt.pause(PLT_TIME_SLEEP)
         time.sleep(TIME_SLEEP)
     time.sleep(2)

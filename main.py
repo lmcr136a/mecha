@@ -9,7 +9,6 @@ from plots import *
 from colors import *
 from circles import *
 from rects import *
-from multiprocessing import Process, Queue
 
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
@@ -169,8 +168,8 @@ if __name__ == "__main__":
             if left_pressed:
                 hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
                 mode_function(hls[len(hls)-1], newdata)
-            if clicked_or_released == "released":
-                hls = interpo_update_fig(hls)
+            # if clicked_or_released == "released":
+            #     hls = interpo_update_fig(hls)
         else:
             pass
 
