@@ -21,7 +21,7 @@ XLIM = 1000
 YLIM = 1000
 ZLIM = 1000
 TIME_SLEEP = 1.0e-5
-PLT_TIME_SLEEP = 1.0e-5
+PLT_TIME_SLEEP = 1.0e-2
 COLORS = ['r', 'b', 'y', 'k', 'g']
 
 
@@ -85,22 +85,22 @@ def get_mode_function(mode_name):
 
 
 if __name__ == "__main__":
-    arduino = serial.Serial(PORT, FREQ)
+arduino = serial.Serial(PORT, FREQ)
 
-    map = plt.figure()
-    map_ax = get_axis(map)
+map = plt.figure()
+map_ax = get_axis(map)
 #    mng = plt.get_current_fig_manager()
 #    mng.full_screen_toggle()
-    plt.show(block=False)
-    prestate = 0
-    right_prestate = 0
-    start_coor = [0, 0, 0]
-    end_coor = [0, 0, 0]
-    cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
+plt.show(block=False)
+prestate = 0
+right_prestate = 0
+start_coor = [0, 0, 0]
+end_coor = [0, 0, 0]
+cursor = map_ax.scatter3D(0, 0, 0, c=0, cmap='Accent')
 
-    color = 'w'
-    color_index = 0
-    hls=[]
+color = 'w'
+color_index = 0
+hls=[]
 
     for i in range(ITER):
         ardu = get_ardu_line(arduino)

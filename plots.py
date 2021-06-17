@@ -18,29 +18,37 @@ def update_fig(hl, new_data):
     plt.draw()
     return hl
 
-#
-# def update_fig(hl, coor_list, new_data):
-#
-#     coor_list[0].append(new_data[0])
-#     coor_list[1].append(new_data[1])
-#     coor_list[2].append(new_data[2])
-#     num_true_pts = len(coor_list[0])
-#     if len(coor_list[0]) < 5.0e+1000000:
-#         return update_fig_raw(hl, new_data)
-#
-#     xdata, ydata, zdata = coor_list
-#
-#     tck, u = interpolate.splprep([xdata, ydata, zdata], s=2)
-#     #x_knots, y_knots, z_knots = interpolate.splev(tck[0], tck)
-#     u_fine = np.linspace(0,1,num_true_pts)
-#     x_fine, y_fine, z_fine = interpolate.splev(u_fine, tck)
-#
-#     hl.set_xdata(np.array(x_fine))
-#     hl.set_ydata(np.array(y_fine))
-#     hl.set_3d_properties(np.array(z_fine))
-#     plt.draw()
-#     return coor_list
-#
+
+def add_noise(data):
+    new = []
+    for d in data:
+        new.append(d+0.0001*np.random.random_sample(1)[0])
+    return new
+
+
+def interpo(hl):
+    """
+    input: hl
+    output: interpolated 된 x, y, z데이터
+    """
+    xdata, ydata, zdata = hl._verts3d
+    xdata = add_noise(xdata)
+    ydata = add_noise(ydata)
+    zdata = add_noise(zdata)
+    tck, u = interpolate.splprep([xdata, ydata, zdata], s=2)
+    #x_knots, y_knots, z_knots = interpolate.splev(tck[0], tck)
+    u_fine = np.linspace(0,1,len(xdata))
+    x_fine, y_fine, z_fine = interpolate.splev(u_fine, tck)
+    return [x_fine, y_fine, z_fine]
+
+
+def interpo_update_fig(hls):
+    interpo_datas = interpo(hls[len(hls)-1])
+    hls[len(hls)-1].set_xdata(np.array(interpo_datas[0]))
+    hls[len(hls)-1].set_ydata(np.array(interpo_datas[1]))
+    hls[len(hls)-1].set_3d_properties(np.array(interpo_datas[2]))
+    return hls
+
 
 def get_3dfig_seed(map_ax, start_point, color="w", show_axis=True):
     x = start_point[0]
@@ -54,4 +62,3 @@ def get_3dfig_seed(map_ax, start_point, color="w", show_axis=True):
         map_ax._axis3don = False
     hl,  = map_ax.plot3D([x], [y], [z], color=color)
     return hl
-

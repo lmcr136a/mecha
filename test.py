@@ -89,8 +89,10 @@ def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
     iblock = round(iter/10)
     dummy=[]
     def f(i):
-        li = list(np.linspace(1, 40, 2*iblock))
-        li += list(np.linspace(40, 10, 2*iblock))
+        li = list(np.linspace(1, 60, 2*iblock))
+        li += list(np.linspace(60, 1, 2*iblock))
+        li += list(np.linspace(1, 60, 2*iblock))
+        li += list(np.linspace(60, 10, 2*iblock))
         li += list(np.linspace(10, 50, 2*iblock))
         li += list(np.linspace(51, 55, 2*iblock))
         li += list(np.linspace(55, 100, 2*iblock))
@@ -213,9 +215,12 @@ if __name__ == "__main__":
             if color_index > len(COLORS):
                 color_index = 0
 
-        elif left_pressed and mode == "default":
-            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
-            mode_function(hls[len(hls)-1], coor_list, newdata)
+        elif mode == "default":
+            if left_pressed:
+                hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+                mode_function(hls[len(hls)-1], newdata)
+            if clicked_or_released == "released":
+                hls = interpo_update_fig(hls)
         else:
             pass
 
