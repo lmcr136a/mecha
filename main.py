@@ -23,7 +23,7 @@ XLIM = 500
 YLIM = 500
 ZLIM = 500
 TIME_SLEEP = 1.0e-5
-PLT_TIME_SLEEP = 1.0e-5
+PLT_TIME_SLEEP = 1.5e-2
 COLORS = ['r', 'b', 'y', 'k', 'g']
 
 
@@ -82,7 +82,7 @@ def get_mode_function(mode_name):
         "cube": cube,
         "circle": circle,
         "colored_circle": colored_circle,
-        "sphere": sphere,
+        # "sphere": sphere,
         "color": color,
     }[mode_name]
 
@@ -152,12 +152,12 @@ if __name__ == "__main__":
                 mode_function(hls[len(hls)-1], start_coor, end_coor)
 
 
-        elif mode in ["sphere"]:
-            hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
-            if clicked_or_released == "released":
-                end_coor = newdata
-                mode_function(hls[len(hls)-1], start_coor, end_coor, map_ax)
-                # mode_function(hl, start_coor, end_coor)
+        # elif mode in ["sphere"]:
+        #     hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
+        #     if clicked_or_released == "released":
+        #         end_coor = newdata
+        #         mode_function(hls[len(hls)-1], start_coor, end_coor, map_ax)
+        #         # mode_function(hl, start_coor, end_coor)
 
         elif left_pressed and mode == "color":
             color_index += 1
