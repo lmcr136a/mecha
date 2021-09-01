@@ -140,7 +140,7 @@ def show_dicom(ax, data_path = "3_OYJ"):
 
     print(f"Shape before resampling: {imgs_to_process.shape}")
 
-    v, f, n = make_mesh(imgs_to_process, 350, step_size=4)
+    v, f, n = make_mesh(imgs_to_process, 350, step_size=30)
     plt_3d(ax, v, f, n)
 
 
@@ -148,3 +148,5 @@ if __name__ == "__main__":
     mapp = plt.figure()
     map_ax = get_axis(mapp)
     show_dicom(map_ax)
+    plt.show(block=False)
+    plt.pause(3)
