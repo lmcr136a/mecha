@@ -10,6 +10,7 @@ from colors import *
 from circles import *
 from rects import *
 from main import *
+from dicom import *
 # git add (푸시하고싶은 파일) 또는 git add . (전체파일)
 # git commit -m "하고싶은 말"
 # git push
@@ -54,6 +55,7 @@ def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
 
 
 if __name__ == "__main__":
+    show_dicom()
     dummy = make_dummy_input(MODE)
 
     mapp = plt.figure()
