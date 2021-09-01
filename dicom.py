@@ -87,11 +87,9 @@ def make_mesh(image, threshold=-300, step_size=1):
     return verts, faces, norm
 
 
-def plt_3d(verts, faces, normals):
+def plt_3d(ax, verts, faces, normals):
     print("Generating Mesh...".center(30))
     x, y, z = zip(*verts)
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
 
     mesh = Poly3DCollection(verts[faces], linewidths=0.05, alpha=1)
     print("Setting light configure...".center(30))
@@ -124,7 +122,7 @@ def plt_3d(verts, faces, normals):
     plt.show()
 
 
-def show_dicom(data_path = "3_OYJ"):
+def show_dicom(ax, data_path = "3_OYJ"):
     output_path = working_path = "outputs/" + data_path
     id = 0
     patient = load_scan(data_path)
@@ -141,4 +139,4 @@ def show_dicom(data_path = "3_OYJ"):
     print(f"Shape before resampling: {imgs_to_process.shape}")
 
     v, f, n = make_mesh(imgs_to_process, 350, step_size=4)
-    plt_3d(v, f, n)
+    plt_3d(ax, v, f, n)

@@ -55,11 +55,11 @@ def make_dummy_input(mode="default", iter=100):  # 3 1 2 1 3
 
 
 if __name__ == "__main__":
-    show_dicom()
     dummy = make_dummy_input(MODE)
 
     mapp = plt.figure()
     map_ax = get_axis(mapp)
+    show_dicom(map_ax)
     #mng = plt.get_current_fig_manager()
     #mng.full_screen_toggle()
     plt.show(block=False)
