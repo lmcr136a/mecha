@@ -131,7 +131,7 @@ if __name__ == "__main__":
                 hls[len(hls)-1].remove()
                 del hls[len(hls)-1]
             except:
-                print("못지워! 지우지마! 안지워!")
+                print("Can't removing")
             print("removed, ", len(hls))
 
         elif mode in ["rect", "line", "colored_rect", "cube"]:
