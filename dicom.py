@@ -121,7 +121,7 @@ def plt_3d(ax, verts, faces, normals):
     ax.set_zlim(0, max(z))
     ax.set_facecolor((0.7, 0.7, 0.7))
     print("Showing...".center(30))
-    plt.show()
+    plt.draw()
 
 
 def show_dicom(ax, data_path = "3_OYJ"):
