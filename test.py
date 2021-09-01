@@ -118,7 +118,6 @@ if __name__ == "__main__":
                 hls.append(get_3dfig_seed(map_ax, newdata, color))
                 mode_function(hls[len(hls)-1], start_coor, end_coor)
 
-
         # elif mode in ["sphere"]:
         #     hls = clicked(hls, clicked_or_released, map_ax, newdata, color)
         #     if clicked_or_released == "released":

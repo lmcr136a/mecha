@@ -16,6 +16,8 @@ from plotly.graph_objs import *
 from matplotlib.colors import LightSource
 from scipy.interpolate import griddata
 
+# from main import *
+
 
 def load_scan(path):
     slices = [pydicom.read_file(path + '/' + s) for s in os.listdir(path)]
@@ -123,7 +125,7 @@ def plt_3d(ax, verts, faces, normals):
 
 
 def show_dicom(ax, data_path = "3_OYJ"):
-    output_path = working_path = "outputs/" + data_path
+    output_path = "outputs/" + data_path
     id = 0
     patient = load_scan(data_path)
     imgs = get_pixels_hu(patient)
@@ -140,3 +142,9 @@ def show_dicom(ax, data_path = "3_OYJ"):
 
     v, f, n = make_mesh(imgs_to_process, 350, step_size=4)
     plt_3d(ax, v, f, n)
+
+
+if __name__ == "__main__":
+    mapp = plt.figure()
+    map_ax = get_axis(mapp)
+    show_dicom(map_ax)
