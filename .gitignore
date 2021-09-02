@@ -2,3 +2,8 @@
 build/
 dist/
 outputs/
+.DS_Store
+.idea/
+__pycache__/dicom.cpython-39.pyc
+case1/
+venv/
