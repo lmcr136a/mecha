@@ -87,11 +87,11 @@ def get_mode_function(mode_name):
 
 
 if __name__ == "__main__":
-    show_dicom()
     arduino = serial.Serial(PORT, FREQ)
 
     map = plt.figure()
     map_ax = get_axis(map)
+    # show_dicom(map_ax)
     #    mng = plt.get_current_fig_manager()
     #    mng.full_screen_toggle()
     plt.show(block=False)
